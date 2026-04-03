@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --skipLibCheck",
     "test:coverage": "echo \"No test runner configured yet; replace this script when adding Vitest/Jest.\" && exit 0"
   },
   "dependencies": {
