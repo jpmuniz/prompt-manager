@@ -1,4 +1,7 @@
-import { SidebarContent } from '@/components/sidebar/sidebar-content';
+import {
+  SidebarContent,
+  SidebarContentProps,
+} from '@/components/sidebar/sidebar-content';
 import { render, screen } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
 
@@ -7,21 +10,50 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
 }));
 
-const makeSut = () => render(<SidebarContent />);
+const initialPrompts = [
+  {
+    id: '1',
+    title: 'Title 01',
+    content: 'Content 01',
+  },
+];
+
+const makeSut = (
+  { prompts = initialPrompts }: SidebarContentProps = {} as SidebarContentProps
+) => render(<SidebarContent prompts={prompts} />);
 
 describe('SidebarContent', () => {
   const user = userEvent.setup();
-  it('should render the button to create new prompt', () => {
-    makeSut();
+  describe('Base', () => {
+    it('should render the button to create new prompt', () => {
+      makeSut();
 
-    expect(screen.getByRole('complementary')).toBeVisible();
-    expect(
-      screen.getByRole('button', {
-        name: /novo prompt/i,
-      })
-    ).toBeVisible();
+      expect(screen.getByRole('complementary')).toBeVisible();
+      expect(
+        screen.getByRole('button', {
+          name: /novo prompt/i,
+        })
+      ).toBeVisible();
+    });
+    it('should render the list of prompts', () => {
+      const input = [
+        {
+          id: '1',
+          title: 'Example 01',
+          content: 'Content 01',
+        },
+        {
+          id: '2',
+          title: 'Example 02',
+          content: 'Content 02',
+        },
+      ];
+      makeSut({ prompts: input });
+
+      expect(screen.getByText(input[0].title)).toBeInTheDocument();
+      expect(screen.getAllByRole('paragraph')).toHaveLength(input.length);
+    });
   });
-
   describe('Collapse / Expand', () => {
     it('It should start expanded and display the minimize button', () => {
       makeSut();
