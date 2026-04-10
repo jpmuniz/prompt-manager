@@ -53,6 +53,16 @@ describe('SidebarContent', () => {
       expect(screen.getByText(input[0].title)).toBeInTheDocument();
       expect(screen.getAllByRole('paragraph')).toHaveLength(input.length);
     });
+
+    it('should update field input when user is typing', async () => {
+      const text = 'AI';
+      makeSut();
+      const searchInput = screen.getByPlaceholderText('Buscar prompts...');
+
+      await user.type(searchInput, text);
+
+      expect(searchInput).toHaveValue(text);
+    });
   });
   describe('Collapse / Expand', () => {
     it('It should start expanded and display the minimize button', () => {
@@ -100,6 +110,23 @@ describe('SidebarContent', () => {
       await user.click(newButton);
 
       expect(pushMock).toHaveBeenCalledWith('/new');
+    });
+  });
+  describe('Search', () => {
+    it('should navigate with URL coded when type and clean', async () => {
+      const text = 'A B';
+      makeSut();
+      const searchInput = screen.getByPlaceholderText('Buscar prompts...');
+
+      await user.type(searchInput, text);
+
+      expect(pushMock).toHaveBeenCalled();
+      const lastCall = pushMock.mock.calls.at(-1);
+      expect(lastCall?.[0]).toBe('/?query=A%20B');
+
+      await user.clear(searchInput);
+      const lastClearCall = pushMock.mock.calls.at(-1);
+      expect(lastClearCall?.[0]).toBe('/');
     });
   });
 });
