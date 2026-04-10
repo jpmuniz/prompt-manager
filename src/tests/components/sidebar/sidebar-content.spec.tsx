@@ -122,7 +122,7 @@ describe('SidebarContent', () => {
 
       expect(pushMock).toHaveBeenCalled();
       const lastCall = pushMock.mock.calls.at(-1);
-      expect(lastCall?.[0]).toBe('/?query=A%20B');
+      expect(lastCall?.[0]).toBe('/?q=A%20B');
 
       await user.clear(searchInput);
       const lastClearCall = pushMock.mock.calls.at(-1);
