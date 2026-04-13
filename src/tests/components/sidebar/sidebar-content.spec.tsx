@@ -100,6 +100,34 @@ describe('SidebarContent', () => {
       expect(expandButton).toBeInTheDocument();
       expect(collapseButton).not.toBeInTheDocument();
     });
+
+    it('The "Create New Prompt" button should appear in the minimized sidebar', async () => {
+      makeSut();
+      const collapseButton = screen.getByRole('button', {
+        name: /minimizar sidebar/i,
+      });
+
+      await user.click(collapseButton);
+
+      const newPromptButton = screen.getByRole('button', {
+        name: 'Novo prompt',
+      });
+      expect(newPromptButton).toBeVisible();
+    });
+
+    it('Not should appear the prompt list in sidebar minimized', async () => {
+      makeSut();
+      const collapseButton = screen.getByRole('button', {
+        name: /minimizar sidebar/i,
+      });
+
+      await user.click(collapseButton);
+
+      const nav = screen.queryByRole('navigation', {
+        name: 'Lista de prompts',
+      });
+      expect(nav).not.toBeInTheDocument();
+    });
   });
   describe('New prompt', () => {
     it('should navogate to new route to create new prompt', async () => {
