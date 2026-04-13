@@ -23,6 +23,7 @@ export type SidebarContentProps = {
 };
 
 export const SidebarContent = ({ prompts }: SidebarContentProps) => {
+  console.log(prompts);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isCollapsed, setIsCollapsed] = useState(false);
